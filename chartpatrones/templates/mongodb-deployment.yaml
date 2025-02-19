@@ -1,0 +1,86 @@
+{{- if .Values.mongodb.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "chartpatrones.fullname" . }}-mongodb-pv
+  labels:
+    {{- include "chartpatrones.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  capacity:
+    storage: {{ .Values.mongodb.persistence.storageSize }}
+  accessModes:
+    {{- toYaml .Values.mongodb.persistence.accessModes | nindent 4 }}
+  hostPath:
+    path: {{ .Values.mongodb.persistence.hostPath }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "chartpatrones.fullname" . }}-mongodb-pvc
+  labels:
+    {{- include "chartpatrones.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  accessModes:
+    {{- toYaml .Values.mongodb.persistence.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.mongodb.persistence.storageSize }}
+  {{- if .Values.mongodb.persistence.storageClass }}
+  storageClassName: {{ .Values.mongodb.persistence.storageClass }}
+  {{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chartpatrones.fullname" . }}-mongodb
+  labels:
+    {{- include "chartpatrones.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  replicas: {{ .Values.mongodb.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "chartpatrones.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: database
+  template:
+    metadata:
+      labels:
+        {{- include "chartpatrones.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: database
+    spec:
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: {{ include "chartpatrones.fullname" . }}-mongodb-pvc
+      containers:
+        - name: mongodb
+          image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
+          imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
+          ports:
+            - name: mongodb
+              containerPort: {{ .Values.mongodb.service.port }}
+              protocol: TCP
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /data/db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  labels:
+    {{- include "chartpatrones.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  type: {{ .Values.mongodb.service.type }}
+  ports:
+    - port: {{ .Values.mongodb.service.port }}
+      targetPort: mongodb
+      protocol: TCP
+      name: mongodb
+  selector:
+    {{- include "chartpatrones.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+{{- end }}
