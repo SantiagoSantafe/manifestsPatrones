@@ -24,6 +24,7 @@ podSecurityContext: {}
 securityContext: {}
 
 service:
+  name: "api-service"
   type: ClusterIP
   port: 8000
 

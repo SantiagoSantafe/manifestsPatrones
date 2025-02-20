@@ -26,12 +26,18 @@ spec:
             - name: http
               containerPort: {{ .Values.frontend.service.port }}
               protocol: TCP
+          volumeMounts:
+            - name: keys
+              mountPath: /app/keys
           {{- if .Values.frontend.readinessProbe.enabled }}
           readinessProbe:
             {{- toYaml .Values.frontend.readinessProbe | nindent 12 }}
           {{- end }}
           resources:
             {{- toYaml .Values.frontend.resources | nindent 12 }}
+      volumes:
+        - name: keys
+          emptyDir: {}  # Para ambientes de prueba. En producción considera usar un PVC.
 ---
 apiVersion: v1
 kind: Service
