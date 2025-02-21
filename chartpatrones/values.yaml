@@ -1,40 +1,33 @@
 # Configuración Global
 nameOverride: ""
 fullnameOverride: ""
-
 # Configuración de Service Account
 serviceAccount:
   create: true
   annotations: {}
   name: ""
   automount: true
-
 # Configuración API
 replicaCount: 2
 image:
   repository: ssanchez4/api-app
   pullPolicy: Always
   tag: "latest"
-
 imagePullSecrets: []
 podAnnotations: {}
 podLabels: {}
-
 podSecurityContext: {}
 securityContext: {}
-
 service:
   name: "api-service"
   type: ClusterIP
   port: 8000
-
 # Configuración de recursos API
 resources:
   limits:
     cpu: 350m
   requests:
     cpu: 50m
-
 # Configuración Autoscaling API
 autoscaling:
   enabled: true
@@ -42,14 +35,13 @@ autoscaling:
   maxReplicas: 5
   targetCPUUtilizationPercentage: 75
   targetMemoryUtilizationPercentage: 80
-
 # Configuración del Frontend
 frontend:
   enabled: true
   replicaCount: 2
   image:
     repository: santiagosantafe/tareak8s
-    tag: frontend
+    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -71,7 +63,6 @@ frontend:
     minReplicas: 1
     maxReplicas: 5
     targetCPUUtilizationPercentage: 75
-
 # Configuración de MongoDB
 mongodb:
   enabled: true
@@ -90,7 +81,6 @@ mongodb:
     storageClass: ""
     accessModes:
       - ReadWriteOnce
-
 # Configuración del Ingress
 ingress:
   enabled: true
@@ -103,12 +93,13 @@ ingress:
         - path: /
           pathType: Prefix
   tls: []
-
 # Variables de entorno globales
 env:
   - name: MONGO_URI
     value: "mongodb://mongodb-service:27017"
-
 nodeSelector: {}
 tolerations: []
 affinity: {}
+api:
+  image:
+    tag: latest
