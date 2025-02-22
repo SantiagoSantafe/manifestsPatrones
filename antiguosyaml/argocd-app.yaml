@@ -10,7 +10,7 @@ spec:
   source:
     path: ''
     repoURL: https://nexus.146.190.187.99.nip.io/repository/helm-repo/
-    targetRevision: '>0.1.0'    # Esto seleccionará la versión más reciente que sea mayor a 0.1.0
+    targetRevision: '>=0.1.0'    # Esto seleccionará la versión más reciente que sea mayor a 0.1.0
     chart: chartpatrones
   project: default
   syncPolicy:

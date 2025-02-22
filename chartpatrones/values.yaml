@@ -12,6 +12,8 @@ replicaCount: 2
 image:
   repository: santiagosantafe/api-app
   pullPolicy: Always
+  tag: 2ddc905
+
 imagePullSecrets: []
 podAnnotations: {}
 podLabels: {}
@@ -99,6 +101,3 @@ env:
 nodeSelector: {}
 tolerations: []
 affinity: {}
-api:
-  image:
-    tag: 2ddc905
