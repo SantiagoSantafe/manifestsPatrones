@@ -41,7 +41,7 @@ frontend:
   replicaCount: 2
   image:
     repository: santiagosantafe/tareak8s
-    tag: latest
+    tag: frontend
     pullPolicy: Always
   service:
     type: ClusterIP
