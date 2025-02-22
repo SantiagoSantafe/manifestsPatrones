@@ -52,7 +52,7 @@ frontend:
     requests:
       cpu: 50m
   readinessProbe:
-    enabled: true
+    enabled: false
     httpGet:
       path: /
       port: http
