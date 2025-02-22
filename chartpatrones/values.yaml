@@ -41,7 +41,7 @@ frontend:
   replicaCount: 2
   image:
     repository: santiagosantafe/tareak8s
-    tag: 0b3af06
+    tag: ff86f0e
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -102,4 +102,4 @@ tolerations: []
 affinity: {}
 api:
   image:
-    tag: 0b3af06
+    tag: ff86f0e
