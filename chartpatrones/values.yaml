@@ -10,7 +10,7 @@ serviceAccount:
 # Configuración API
 replicaCount: 2
 image:
-  repository: ssanchez4/api-app
+  repository: santiagosantafe/api-app
   pullPolicy: Always
   tag: "latest"
 imagePullSecrets: []
